@@ -3,6 +3,9 @@ import argparse
 import itertools
 import sys
 
+# TODO:
+# [ ]:向下继承，当选E96包含E24系统，E24天然包含E12
+
 # E12系列
 E12_SERIES = [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82]
 E12_BASE = [1E1, 1E2, 1E3, 1E4, 1E5, 1E6]
