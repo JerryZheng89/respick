@@ -4,7 +4,7 @@ import itertools
 import sys
 
 # TODO:
-# [ ]:向下继承，当选E96包含E24系统，E24天然包含E12
+# [*]:向下继承，当选E96包含E24系统，E24天然包含E12
 
 # E12系列
 E12_SERIES = [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82]
@@ -40,11 +40,23 @@ base_map = {
     "E24": E24_BASE,
     "E96": E96_BASE,
 }
-
+res_e24_list = []
+res_e96_list = []
 
 # 生成电阻列表
-def generate_e_series(series, decades):
-    return sorted(round(base * decade, 1) for base in series for decade in decades)
+def generate_e_series(series_name):
+    if series_name == 'E96':
+        decades = base_map[series_name]
+        series = series_map[series_name]
+        res_e96_list = [round(base * decade, 1) for base in series for decade in decades]
+        decades = base_map['E24']
+        series = series_map['E24']
+        res_e24_list = [round(base * decade, 1) for base in series for decade in decades]
+        return sorted(list(set(res_e24_list+res_e96_list)))
+    else:
+        decades = base_map[series_name]
+        series = series_map[series_name]
+        return sorted(round(base * decade, 1) for base in series for decade in decades)
 
 def format_resistor(value_ohm: float) -> str:
     if value_ohm < 1_000:
@@ -57,8 +69,8 @@ def format_resistor(value_ohm: float) -> str:
         return f"{value_ohm / 1_000_000_000:.1f}G"
 
 
-def find_best_divider(vout_target, vfb, r_min, r_max, series, base):
-    resistors = [r for r in generate_e_series(series, base) if r_min <= r <= r_max]
+def find_best_divider(vout_target, vfb, r_min, r_max, series_name):
+    resistors = [r for r in generate_e_series(series_name) if r_min <= r <= r_max]
     best_error = float('inf')
     best_pair_list = []
     best_pair = None
@@ -109,7 +121,7 @@ def main():
     args = parser.parse_args()
 
     best_list = find_best_divider(args.vout, args.vfb, args.rmin, args.rmax, 
-                             series_map[args.series], base_map[args.series])
+                             args.series)
 
     if len(best_list):
         for index, best in enumerate(best_list):
