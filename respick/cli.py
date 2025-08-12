@@ -2,7 +2,6 @@ import sys
 import argparse
 from .core import find_best_divider
 
-
 def format_resistor(value_ohm: float) -> str:
     if value_ohm < 1_000:
         return f"{value_ohm:.1f}R"
@@ -18,8 +17,8 @@ def main():
         description="🔧 自动从标准阻值中选出最合适的电阻对用于DCDC分压反馈。",
         epilog="""
 示例：
-  python resistor_divider_picker.py --vout 3.3 --vfb 0.8 --series E24
-  python resistor_divider_picker.py --vout 5 --vfb 1.25 --rmin 1000 --rmax 100000 --series E12
+  respick --vout 3.3 --vfb 0.8 --series E24
+  respick --vout 5 --vfb 1.25 --rmin 1000 --rmax 100000 --series E12
 
 说明：
   R1接在输出与FB之间，R2接在FB与GND之间
@@ -29,7 +28,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument("--vout", type=float, required=True, help="Target output voltage")
-    parser.add_argument("--vfb", type=float, default=0.8, help="Feedback reference voltage (default: 0.8V)")
+    parser.add_argument("--vfb", type=float, default=0.6, help="Feedback reference voltage (default: 0.8V)")
     parser.add_argument("--rmin", type=float, default=1e3, help="Minimum resistor value (default 1k)")
     parser.add_argument("--rmax", type=float, default=1e6, help="Maximum resistor value (default 1M)")
     parser.add_argument("--series", choices=["E24", "E12", "E96"], default="E24", help="Resistor series to use")

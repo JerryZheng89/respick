@@ -16,16 +16,25 @@ options:
                         Resistor series to use
 
 示例：
-  python resistor_divider_picker.py --vout 3.3 --vfb 0.8 --series E24
-  python resistor_divider_picker.py --vout 5 --vfb 1.25 --rmin 1000 --rmax 100000 --series E12
+  respick --vout 3.3 --vfb 0.8 --series E24
+  respick --vout 5 --vfb 1.25 --rmin 1000 --rmax 100000 --series E12
 
 说明：
   R1接在输出与FB之间，R2接在FB与GND之间
   输出电压 Vout = Vfb * (1 + R1/R2)
 ```
 
+- 本地测试
+```shell
+python -m respick --vout 3.3 --vfb 0.6
+```
 
+- 本地安装
+```shell
+pip install -e .
+```
 
-```python
-python resistor_divider_picker.py --vout 1.8 --vfb 0.6 --series E24
+- 本地cli终端测试
+```shell
+respick --vout 1.8 --vfb 0.6 --series E24
 ```
