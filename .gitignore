@@ -1,0 +1,9 @@
+env
+*.xlsx
+*.BOM
+__pycache__/
+.vscode/
+*.pyc
+.DS_Store
+dist
+build

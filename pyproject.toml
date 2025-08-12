@@ -1,0 +1,16 @@
+[project]
+name = "respick"
+version = "0.1.0"
+description = "Resistor divider picker for DCDC/LDO applications"
+authors = [{ name="Jerry Zheng", email="JerryZheng2018@outlook.com" }]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = []
+
+[project.scripts]
+respick = "respick.cli:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
