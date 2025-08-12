@@ -47,11 +47,9 @@ def generate_e_series(series_name):
         decades = base_map[series_name]
         series = series_map[series_name]
         res_e96_list = [round(base * decade, 1) for base in series for decade in decades]
-        print(f"Generated {len(res_e96_list)} E96 resistors.")
         decades = base_map['E24']
         series = series_map['E24']
         res_e24_list = [round(base * decade, 1) for base in series for decade in decades]
-        print(f"Generated {len(res_e24_list)} E24 resistors.")
         return sorted(list(set(res_e24_list+res_e96_list)))
     else:
         decades = base_map[series_name]
