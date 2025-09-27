@@ -38,3 +38,13 @@ pip install -e .
 ```shell
 respick --vout 1.8 --vfb 0.6 --series E24
 ```
+
+## build
+```shell
+python -m build
+```
+
+## upload pypi
+```shell
+twine upload dist/*
+```
