@@ -56,7 +56,7 @@ def generate_e_series(series_name):
         series = series_map[series_name]
         return sorted(round(base * decade, 1) for base in series for decade in decades)
 
-def find_best_divider(vout_target, vfb, r_min='1e3', r_max='1e6', series_name='E24'):
+def find_best_divider(vout_target, vfb, r_min=1E3, r_max=1E6, series_name='E24'):
     resistors = [r for r in generate_e_series(series_name) if r_min <= r <= r_max]
     best_error = float('inf')
     best_pair_list = []
