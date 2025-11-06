@@ -40,6 +40,21 @@ base_map = {
 res_e24_list = []
 res_e96_list = []
 
+
+def parse_input_res_value(value: str) -> float:
+    v = value.strip().upper()
+    if v.endswith("R"):
+        return float(v[:-1])
+    elif v.endswith("K"):
+        return float(v[:-1]) * 1e3
+    elif v.endswith("M"):
+        return float(v[:-1]) * 1e6
+    else:
+        try:
+            return float(v)
+        except ValueError:
+            raise ValueError(f"无法解析数值: {value}")
+
 # 生成电阻列表
 def generate_e_series(series_name):
     if series_name == 'E96':
@@ -56,23 +71,56 @@ def generate_e_series(series_name):
         series = series_map[series_name]
         return sorted(round(base * decade, 1) for base in series for decade in decades)
 
-def find_best_divider(vout_target, vfb, r_min=1E3, r_max=1E6, series_name='E24'):
+def find_best_divider(vout_target, vfb, r_min=1E3, r_max=1E6, series_name='E24', keep_r1=None, keep_r2=None):
     resistors = [r for r in generate_e_series(series_name) if r_min <= r <= r_max]
     best_error = float('inf')
     best_pair_list = []
     best_pair = None
     pair_index = 0
 
-    for R1, R2 in itertools.product(resistors, repeat=2):
-        vout = vfb * (1 + R1 / R2)
-        error = abs(vout - vout_target)
-        if error < best_error:
-            best_error = error
-            best_pair = (R1, R2, vout, error)
-            best_pair_list.clear()
-            best_pair_list.append(best_pair)
-        elif error == best_error:
-            best_pair = (R1, R2, vout, error)
-            best_pair_list.append(best_pair)
+    if keep_r1 and keep_r2:
+        return [(keep_r1, keep_r2, vfb * (1 + keep_r1 / keep_r2), 
+                 abs(vfb * (1 + keep_r1 / keep_r2) - vout_target))]
+
+    if keep_r1:
+        for R2 in resistors:
+            R1 = parse_input_res_value(keep_r1)
+            vout = vfb * (1 + R1 / R2)
+            error = abs(vout - vout_target)
+            if error < best_error:
+                best_error = error
+                best_pair = (R1, R2, vout, error)
+                best_pair_list.clear()
+                best_pair_list.append(best_pair)
+            elif error == best_error:
+                best_pair = (R1, R2, vout, error)
+                best_pair_list.append(best_pair)
+        return best_pair_list
+    elif keep_r2:
+        for R1 in resistors:
+            R2 = parse_input_res_value(keep_r2)
+            vout = vfb * (1 + R1 / R2)
+            error = abs(vout - vout_target)
+            if error < best_error:
+                best_error = error
+                best_pair = (R1, R2, vout, error)
+                best_pair_list.clear()
+                best_pair_list.append(best_pair)
+            elif error == best_error:
+                best_pair = (R1, R2, vout, error)
+                best_pair_list.append(best_pair)
+        return best_pair_list
+    else:
+        for R1, R2 in itertools.product(resistors, repeat=2):
+            vout = vfb * (1 + R1 / R2)
+            error = abs(vout - vout_target)
+            if error < best_error:
+                best_error = error
+                best_pair = (R1, R2, vout, error)
+                best_pair_list.clear()
+                best_pair_list.append(best_pair)
+            elif error == best_error:
+                best_pair = (R1, R2, vout, error)
+                best_pair_list.append(best_pair)
 
     return best_pair_list

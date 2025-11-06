@@ -29,6 +29,8 @@ def main():
     )
     parser.add_argument("--vout", type=float, required=True, help="Target output voltage")
     parser.add_argument("--vfb", type=float, default=0.6, help="Feedback reference voltage (default: 0.8V)")
+    parser.add_argument("--r1", type=str, default=None, help="Fixed R1 value (optional)")
+    parser.add_argument("--r2", type=str, default=None, help="Fixed R2 value (optional)")
     parser.add_argument("--rmin", type=float, default=1e3, help="Minimum resistor value (default 1k)")
     parser.add_argument("--rmax", type=float, default=1e6, help="Maximum resistor value (default 1M)")
     parser.add_argument("--series", choices=["E24", "E12", "E96"], default="E24", help="Resistor series to use")
@@ -40,7 +42,7 @@ def main():
     args = parser.parse_args()
 
     best_list = find_best_divider(args.vout, args.vfb, args.rmin, args.rmax, 
-                             args.series)
+                             args.series, keep_r1=args.r1, keep_r2=args.r2)
     if len(best_list):
         for index, best in enumerate(best_list):
             r1, r2, vout, err = best
