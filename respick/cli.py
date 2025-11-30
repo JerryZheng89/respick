@@ -4,13 +4,13 @@ from .core import find_best_divider
 
 def format_resistor(value_ohm: float) -> str:
     if value_ohm < 1_000:
-        return f"{value_ohm:.1f}R"
+        return f"{value_ohm:g}R"
     elif value_ohm < 1_000_000:
-        return f"{value_ohm / 1_000:.1f}K"
+        return f"{value_ohm / 1_000:g}K"
     elif value_ohm < 1_000_000_000:
-        return f"{value_ohm / 1_000_000:.1f}M"
+        return f"{value_ohm / 1_000_000:g}M"
     else:
-        return f"{value_ohm / 1_000_000_000:.1f}G"
+        return f"{value_ohm / 1_000_000_000:g}G"
 
 def main():
     parser = argparse.ArgumentParser(
@@ -49,7 +49,6 @@ def main():
             r1_format = format_resistor(r1)
             r2_format = format_resistor(r2)
 
-            # print(f"✅ 最佳组合: R1 = {r1:.1f} Ω, R2 = {r2:.1f} Ω")
             print(f"✅ 最佳组合{index}: R1 = {r1_format}, R2 = {r2_format}")
         print(f"→ 输出电压 Vout = {vout:.4f} V，误差 = {err:.4f} V ({(err / args.vout) * 100:.2f} %)")
     else:
